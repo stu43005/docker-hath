@@ -1,39 +1,36 @@
 FROM anapsix/alpine-java:7
 MAINTAINER Luis Alvarado <alvaradorocks@gmail.com>
 
-# Install dependencies 
-RUN apk --no-cache add curl sqlite unzip
-
 # Common
-ENV HatH_VERSION 1.4.1
+ENV HatH_VERSION 1.4.2
 ENV HatH_DOWNLOAD_URL https://repo.e-hentai.org/hath/HentaiAtHome_$HatH_VERSION.zip
-ENV HatH_DOWNLOAD_SHA256 811f31bd8472ca1f63b7e1cbb47c8f10185a613c1373004882af30fb8597d656
+ENV HatH_DOWNLOAD_SHA256 da25fdec0a9535b265677a230e5cf84c75f0cfe790cffc51a520cf7cf3b01b2f
 ENV HatH_USER hath
 ENV HatH_PATH "/home/$HatH_USER/client"
 ENV HatH_ARCHIVE hath.zip
 ENV HatH_PORT 11112
 ENV HatH_JAR HentaiAtHome.jar
-ENV HatH_ARGS --use_more_memory --disable_logging --port "$HatH_PORT"
+ENV HatH_ARGS --port "$HatH_PORT" --cache-dir "$HatH_PATH/cache" --data-dir "$HatH_PATH/data" --download-dir "$HatH_PATH/download" --log-dir "$HatH_PATH/log" --temp-dir "$HatH_PATH/temp"
 
 # Container Setup
-RUN adduser -D "$HatH_USER" && \
+RUN apk --no-cache add curl sqlite unzip && \
+    adduser -D "$HatH_USER" && \
     mkdir "$HatH_PATH" && \
     cd "$HatH_PATH" && \
     curl -fsSL "$HatH_DOWNLOAD_URL" -o "$HatH_ARCHIVE" && \
     echo -n ""$HatH_DOWNLOAD_SHA256"  "$HatH_ARCHIVE"" | sha256sum -c && \
     unzip "$HatH_ARCHIVE" && \
-    rm "$HatH_ARCHIVE"
-
-RUN mkdir -p "$HatH_PATH/cache" "$HatH_PATH/data" "$HatH_PATH/downloaded" "$HatH_PATH/hathdl" "$HatH_PATH/tmp"
+    rm "$HatH_ARCHIVE" && \
+    mkdir -p "$HatH_PATH/cache" "$HatH_PATH/data" "$HatH_PATH/download" "$HatH_PATH/log" "$HatH_PATH/temp" && \
+    chmod -R 775 "$HatH_PATH"
 
 COPY client/ "$HatH_PATH/"
 
-RUN chmod -R 775 "$HatH_PATH"
 WORKDIR "$HatH_PATH"
 
 # Expose the port
 EXPOSE "$HatH_PORT"
 
-VOLUME ["$HatH_PATH/cache", "$HatH_PATH/data", "$HatH_PATH/downloaded", "$HatH_PATH/hathdl"]
+VOLUME ["$HatH_PATH/cache", "$HatH_PATH/data", "$HatH_PATH/download", "$HatH_PATH/log", "$HatH_PATH/temp"]
 
-CMD java -jar "$HatH_JAR"
+CMD java -jar "$HatH_JAR" $HatH_ARGS
