@@ -7,8 +7,8 @@ RUN apk update && \
     apk --no-cache add curl sqlite unzip && \
     mkdir -p /hath && \
     cd /hath && \
-    curl -fsSL https://repo.e-hentai.org/hath/HentaiAtHome_1.4.2.zip -o hath.zip && \
-    echo -n "da25fdec0a9535b265677a230e5cf84c75f0cfe790cffc51a520cf7cf3b01b2f  hath.zip" | sha256sum -c && \
+    curl -fsSL https://repo.e-hentai.org/hath/HentaiAtHome_1.6.0.zip -o hath.zip && \
+    echo -n "597f0ae2d114a86e021013b0146d59b1f2f8be2025bfae6b38c181515b795018  hath.zip" | sha256sum -c && \
     unzip hath.zip && \
     rm hath.zip && \
     apk del curl unzip && \
