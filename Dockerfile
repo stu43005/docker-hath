@@ -1,4 +1,4 @@
-FROM anapsix/alpine-java:7
+FROM anapsix/alpine-java:8
 MAINTAINER Shiaupiau <stu43005@gmail.com>
 
 ENV HatH_PORT 11112
