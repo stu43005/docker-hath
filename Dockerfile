@@ -1,5 +1,8 @@
 FROM anapsix/alpine-java:8
-MAINTAINER Shiaupiau <stu43005@gmail.com>
+LABEL maintainer="Shiaupiau <stu43005@gmail.com>"
+LABEL org.opencontainers.image.title="Hentai@Home Client"
+LABEL org.opencontainers.image.description="Docker image for Hentai@Home Client"
+LABEL org.opencontainers.image.url="https://e-hentai.org/hentaiathome.php"
 
 ENV HatH_PORT 11112
 
@@ -7,8 +10,8 @@ RUN apk update && \
     apk --no-cache add curl sqlite unzip && \
     mkdir -p /hath && \
     cd /hath && \
-    curl -fsSL https://repo.e-hentai.org/hath/HentaiAtHome_1.6.0.zip -o hath.zip && \
-    echo -n "597f0ae2d114a86e021013b0146d59b1f2f8be2025bfae6b38c181515b795018  hath.zip" | sha256sum -c && \
+    curl -fsSL https://repo.e-hentai.org/hath/HentaiAtHome_1.6.4.zip -o hath.zip && \
+    echo -n "25351e4b43169f0bad25abcfe7f61034f03cca08b69f219727713975dc5b03b1  hath.zip" | sha256sum -c && \
     unzip hath.zip && \
     rm hath.zip && \
     apk del curl unzip && \
